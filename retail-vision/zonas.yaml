@@ -1,0 +1,13 @@
+# Coordenadas normalizadas: 0,0 = esquina superior izquierda · 1,1 = inferior derecha.
+# Edítalas a mano o dibújalas con:  python definir_zonas.py
+
+linea_entrada:
+  p1: [0.5, 0.05]
+  p2: [0.5, 0.95]
+  invertir_sentido: false   # cámbialo a true si cuenta entradas como salidas
+
+zonas:
+  - nombre: Zona A
+    puntos: [[0.03, 0.10], [0.33, 0.10], [0.33, 0.90], [0.03, 0.90]]
+  - nombre: Zona B
+    puntos: [[0.67, 0.10], [0.97, 0.10], [0.97, 0.90], [0.67, 0.90]]

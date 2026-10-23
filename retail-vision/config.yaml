@@ -1,0 +1,58 @@
+# ─────────────────────────────────────────────────────────────
+#  Retail Vision · configuración del prototipo
+# ─────────────────────────────────────────────────────────────
+
+# Fuente de video
+#   0                                   → cámara integrada de la laptop
+#   1                                   → segunda cámara (USB)
+#   "video.mp4"                         → un video grabado
+#   "rtsp://usuario:clave@IP:554/..."   → cámara IP / DVR de la tienda
+fuente: 0
+
+# Modelo de detección (se descarga solo la primera vez)
+#   yolo11n.pt → más rápido, ideal para laptop sin GPU
+#   yolo11s.pt → más preciso, necesita más equipo
+modelo: yolo11n.pt
+
+# Confianza mínima para aceptar una detección (0 a 1)
+confianza: 0.40
+
+# Algoritmo de seguimiento: bytetrack.yaml (rápido) o botsort.yaml (más estable)
+tracker: bytetrack.yaml
+
+# Dispositivo: auto | cpu | mps (Mac con chip M) | 0 (GPU NVIDIA)
+dispositivo: auto
+
+# Punto de la persona que se usa para zonas y línea
+#   centro → recomendado con la cámara de la laptop (no se ven los pies)
+#   pies   → recomendado con cámaras de techo en la tienda
+punto_referencia: centro
+
+# Segundos sin ver a una persona para darla por ida
+tiempo_perdida_seg: 3.0
+
+# Segundos fuera de una zona antes de cerrar la visita (evita conteos por "temblor")
+gracia_zona_seg: 0.7
+
+# Duración mínima para contar una visita a zona
+visita_minima_seg: 1.0
+
+# Re-identificación: conserva el mismo ID cuando una persona sale del cuadro y regresa.
+# Compara la apariencia del cuerpo (ropa, colores, complexión). No usa la cara.
+reid:
+  activo: true
+  modelo: yolo26s-reid.onnx      # yolo26n-reid.onnx = más rápido, yolo26s = más preciso
+  umbral: 0.45                   # similitud mínima (0 a 1) para decir "es la misma persona"
+                                 #   súbelo (0.55) si junta a personas distintas
+                                 #   bájalo (0.38) si no reconoce a alguien que regresa
+  margen: 0.05                   # ventaja mínima sobre el segundo candidato más parecido
+  memoria_min: 30                # minutos que se recuerda a alguien que ya no está en cuadro
+  muestras_confirmacion: 3       # muestras antes de decidir quién es (tarda ~1 s)
+  espera_max_seg: 1.0
+
+# Archivo con la línea de entrada y las zonas (se edita con definir_zonas.py)
+archivo_zonas: zonas.yaml
+
+# Dónde se guardan eventos, mapa de calor y videos
+base_datos: resultados/eventos.db
+carpeta_resultados: resultados
